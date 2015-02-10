@@ -1,0 +1,15 @@
+67348b94e67116e72a4a4b1413b54e87 *DESCRIPTION
+6f10114ca752f5d896c5fdee6d466d55 *NAMESPACE
+22c328a29dfbc53bc2e81a42604d41b7 *R/BSGS.Simple.r
+c8f56e25c429d8ff7f18ed2ca298e671 *R/BSGS.r
+a4aceb0b7cb467052bf58c473a786bd5 *R/CompWiseGibbs.r
+9c23f608e61dbf4104b5aeb525ce7b5d *R/CompWiseGibbs_SMP.r
+958063354538f3e114257b9aec5074a7 *R/GroupMH.r
+326a9b688ec0d0dfc78660b95d8abe51 *data/Crisis2008.rda
+061f1f73b75ff7373f06998742db542e *data/Crisis2008BalancedData.rda
+4366b9046708cce35afc7fa074985e18 *man/BSGS.Rd
+42210148aebdc050ab31f387b17e363d *man/BSGS.Simple.Rd
+6c99bdecd5db50b8bde5fb21f144d547 *man/CompWiseGibbsSMP.Rd
+754d8b1f6348b2522e126bc901fc4cdc *man/CompWiseGibbsSimple.Rd
+17efb71b7b003b4a5c2da82dcf1fab6c *man/Crisis2008.Rd
+e85ce6446f621139d9f189d8480f71ba *man/Crisis2008BalancedData.Rd

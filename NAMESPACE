@@ -1,0 +1,6 @@
+exportPattern(BSGS, BSGS.Simple, CompWiseGibbsSimple, CompWiseGibbsSMP, Crisis2008, Crisis2008BalancedData)
+
+import(MASS)
+import(pscl)
+import(compiler)
+import(plyr)
