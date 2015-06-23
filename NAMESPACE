@@ -1,6 +1,10 @@
-exportPattern(BSGS, BSGS.Simple, CompWiseGibbsSimple, CompWiseGibbsSMP, Crisis2008, Crisis2008BalancedData)
+exportPattern(BSGS.Sample, BSGS.Simple, CompWiseGibbsSimple, CompWiseGibbsSMP, 
+BSGS.PE, MSE.BSGS, TCR.TPR.FPR.BSGS,
+CGS.SMP.PE, MSE.CGS.SMP, TCR.TPR.FPR.CGS.SMP,
+Crisis2008, Crisis2008BalancedData)
 
 import(MASS)
 import(pscl)
 import(compiler)
 import(plyr)
+import(batchmeans)

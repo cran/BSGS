@@ -5,31 +5,26 @@
 # Description: Perform Bayesian variable selection with component-wise prior to identify the important variable                         #
 #=======================================================================================================================================#
 
-CompWiseGibbsSMP = function(Y, X, beta.value, r, tau2, rho, sigma2, nu, lambda, num.of.inner.iter, num.of.iteration)
+CompWiseGibbsSMP = function(Y, X, beta.value, r, tau2, rho, sigma2, nu, lambda, num.of.inner.iter, num.of.iteration, MCSE.Sigma2.Given)
 {
 
 	num.of.obs = length(Y)
 	num.of.covariates = ncol(X)
 	x = X
 	y = Y
-	beta.samples = matrix(0, num.of.covariates, num.of.iteration)
-	beta.samples[, 1] = beta.value
-	beta.sample = beta.value
+	r.samples = sigma2.samples = beta.samples = numeric(0)
 
-	sigma2.samples = rep(0, num.of.iteration)
-
-	sigma2.samples[1] = sigma2.sample = sigma2
-
-	r.samples = matrix(0, num.of.covariates, num.of.iteration)
-	r.sample = r.samples[, 1] = r
+  	r.sample = r.samples = r
+  	beta.sample = beta.samples = c(beta.value)
+  	sigma2.sample = sigma2.samples = sigma2
 
 	iter = 1
-
+	start.run = proc.time()
 	while(iter < num.of.iteration){
 	#===========================================
 	# Add a variable
 	#===========================================
-		for(num.of.inner.iter in 1:num.of.inner.iter){
+		for(num.of.inner.iter.index in 1:num.of.inner.iter){
 			Add.or.Delete = rbinom(1,1, 0.5)
 
 			if(all(r.sample ==1)){
@@ -71,7 +66,7 @@ CompWiseGibbsSMP = function(Y, X, beta.value, r, tau2, rho, sigma2, nu, lambda, 
 							var.selection = sample(which(r.sample==0), 1, prob = exp(log.ratio.1.0))
 						r.sample[var.selection] = 1
 						SSX = sum((x[, var.selection])^2)
-						SSR = t(y -x[, -var.selection] %*% matrix(beta.samples[-var.selection, iter], ncol=1)) %*% as.matrix( x[, var.selection])
+						SSR = t(y -x[, -var.selection] %*% matrix(c(beta.sample)[-var.selection], ncol=1)) %*% as.matrix( x[, var.selection])
 						mu.beta = SSR * tau2 / (SSX * tau2 + sigma2.sample)
 						var.beta = tau2 * sigma2.sample /(SSX * tau2 + sigma2.sample)
 						beta.sample[var.selection] = rnorm(1, mu.beta, sqrt(var.beta))
@@ -86,7 +81,7 @@ CompWiseGibbsSMP = function(Y, X, beta.value, r, tau2, rho, sigma2, nu, lambda, 
 						var.delete = which(r.sample==1)
 					var.delete = var.selection = sample(which(r.sample==1), 1)
 					SSX = sum((x[, var.delete])^2)
-					SSR = t(y -x[, -var.delete] %*% matrix(beta.samples[-var.delete, iter], ncol=1)) %*% as.matrix( x[, var.delete])
+					SSR = t(y -x[, -var.delete] %*% matrix(c(beta.sample)[-var.delete], ncol=1)) %*% as.matrix( x[, var.delete])
 
 					mu.beta = SSR * tau2 / (SSX * tau2 + sigma2.sample)
 					var.beta = tau2 * sigma2.sample /(SSX * tau2 + sigma2.sample)
@@ -105,18 +100,26 @@ CompWiseGibbsSMP = function(Y, X, beta.value, r, tau2, rho, sigma2, nu, lambda, 
 			}
 		}
 		
-		beta.samples[, iter+1] = beta.sample
-		r.samples[, iter+1] = r.sample
+		beta.samples = cbind(beta.samples, c(beta.sample))
+		r.samples = cbind(r.samples, c(r.sample))
 		
 		a.sample = num.of.obs+ sum(r.sample)
 		b.sample =  sum( (y -x %*% matrix(beta.sample, ncol=1))^2 ) + nu*lambda
 
 		sigma2.sample = rigamma(1, a.sample/2, b.sample/2)
 
-		sigma2.samples[iter+1] = sigma2.sample
+		sigma2.samples= c(sigma2.samples, sigma2.sample)
 
 		iter = iter+1
+
+	    if(iter==num.of.iteration)
+	      if(bm(sigma2.samples)$se > MCSE.Sigma2.Given){
+	        num.of.iteration = num.of.iteration + 100
+	        cat("Sigma2 = ", bm(sigma2.samples)$est, "\tMCSE = ", bm(sigma2.samples)$se, "\tNumber of Iterations = ", num.of.iteration, "\n")
+	      }
+
 	}
-	list(beta.sim = beta.samples, sigma2.sim = sigma2.samples, r.sim = r.samples)
+	end.run = proc.time()
+	list(beta.samples = beta.samples, sigma2.samples = sigma2.samples, r.samples = r.samples, Iteration = num.of.iteration, TimeElapsed = (end.run-start.run))
 }
 

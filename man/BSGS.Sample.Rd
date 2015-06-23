@@ -1,12 +1,11 @@
-\name{BSGS.Simple}
-\alias{BSGS.Simple}
+\name{BSGS.Sample}
+\alias{BSGS.Sample}
 %\keyword{arith}
-\title{The group-wise Gibbs sampler for sparse group selection.}
-\description{Generate the posterior samples to perform Bayesian sparse group selection to identify the important groups of variables and variables within those.}
-\usage{BSGS.Simple(Y, X, Group.Index, r.value, eta.value, beta.value, tau2.value,
-rho.value, theta.value, sigma2.value, nu, lambda, Num.of.Iter.Inside.CompWise,
+\title{Sample version of group-wise Gibbs sampler for sparse group selection.}
+\description{Generate the posterior samples by an approximation sampling method to perform Bayesian sparse group selection to identify the important groups of variables and variables within those.}
+\usage{BSGS.Sample(Y, X, Group.Index, r.value, eta.value, beta.value, tau2.value, 
+rho.value, theta.value, sigma2.value, nu, lambda, Num.of.Iter.Inside.CompWise, 
 Num.Of.Iteration, MCSE.Sigma2.Given)
-
 }
 \arguments{
 \item{Y}{vector of observations of length \eqn{n}.}
@@ -32,12 +31,9 @@ Num.Of.Iteration, MCSE.Sigma2.Given)
 
 
 \dontrun{
-
-output = BSGS.Simple(Y, X, Group.Index, r.value, eta.value, beta.value, tau2.value, 
-	     rho.value,theta.value, sigma2.value, nu, lambda, Num.of.Iter.Inside.CompWise, 
-	     Num.Of.Iteration, MCSE.Sigma2.Given)
-
-
+output = BSGS.Sample(Y, X, Group.Index, r.value, eta.value, beta.value, tau2.value, 
+	rho.value, theta.value, sigma2.value, nu, lambda, 
+	Num.of.Iter.Inside.CompWise, Num.Of.Iteration, MCSE.Sigma2.Given)
 }
 
 }
